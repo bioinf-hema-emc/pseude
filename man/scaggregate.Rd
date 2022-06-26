@@ -4,14 +4,14 @@
 \alias{scaggregate}
 \title{Aggregate single-cell RNA-seq data to desired level}
 \usage{
-scaggregate(sc_counts, agg_link, agg_group = "sample_name")
+scaggregate(sc_counts, agg_table, agg_group = "sample_name")
 }
 \arguments{
 \item{sc_counts}{Table that contains the cell-level gene-counts}
 
-\item{agg_link}{Look-up table that links cells to aggregation groups}
+\item{agg_table}{Look-up table that links cells to aggregation groups}
 
-\item{agg_group}{String with column in agg_link that contains the grouping}
+\item{agg_group}{String with column in agg_table that contains the grouping}
 }
 \value{
 Returns counts aggregated to specified level
