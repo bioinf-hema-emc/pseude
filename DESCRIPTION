@@ -1,18 +1,25 @@
 Package: pseude
-Title: Aggregate Counts and Runs DESeq2
+Title: Aggregate Counts and Runs 'DESeq2'
 Version: 0.0.0.9000
 Authors@R: 
     person("Chiel", "Wevers", , "wevers.mjw@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: Aggregates single-cell level gene expression to designated-level
+    expression and runs  differential expression analysis from 'DESeq2' on the
+    aggregated values. One can choose to use multiple covariates, such as
+    batches or patients, in regression. Output will consist out of DE genes and,
+    if applicable, QC metrics.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports:
-  data.table (>= 1.14.2),
-  Matrix (>= 1.4-1)
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
+    ashr,
+    DESeq2,
+    Matrix,
+    Matrix.utils,
+    openxlsx
+Depends: 
+    R (>= 2.10)
+LazyData: true
+LazyDataCompression: bzip2
