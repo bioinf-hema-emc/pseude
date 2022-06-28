@@ -9,6 +9,7 @@ scdeseq(
   agg_table,
   design = "~state",
   comparison = "state,young,old",
+  threads = 10,
   do_prefilter = TRUE
 )
 }
@@ -20,6 +21,8 @@ scdeseq(
 \item{design}{String used as formula in DE analysis (default = "~state")}
 
 \item{comparison}{A string in form 'condition,group A,group B'}
+
+\item{threads}{Number of workers used during DE analysis}
 
 \item{do_prefilter}{Remove genes only expressed in a few samples
 (default = TRUE)}

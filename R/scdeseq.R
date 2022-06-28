@@ -6,6 +6,7 @@
 #' @param agg_table Table used to indicate which sample belongs to which state
 #' @param design String used as formula in DE analysis (default = "~state")
 #' @param comparison A string in form 'condition,group A,group B'
+#' @param threads Number of workers used during DE analysis
 #' @param do_prefilter Remove genes only expressed in a few samples
 #' (default = TRUE)
 #' @return Returns a DESeqDataSet object with results stored as metadata
@@ -23,6 +24,7 @@ scdeseq <- function(agg_counts,
                     agg_table,
                     design = "~state",
                     comparison = "state,young,old",
+                    threads = 10,
                     do_prefilter = TRUE) {
 
    # Define variables
@@ -30,6 +32,7 @@ scdeseq <- function(agg_counts,
   con_id1 <- c(agg_table[, spl_com[1]] == spl_com[2])
   con_id2 <- c(agg_table[, spl_com[1]] == spl_com[3])
   design <- stats::as.formula(design)
+  threads <- BiocParallel::register(BiocParallel::MulticoreParam(threads))
 
   # Generate DESeqDataSet for DE analysis
   dds <- DESeq2::DESeqDataSetFromMatrix(agg_counts, colData = agg_table,
@@ -42,9 +45,9 @@ scdeseq <- function(agg_counts,
     kp_gene <- rowSums(dds_frag[, con_id1] >= 2) >= round(sum(con_id1) / 2) |
       rowSums(dds_frag[, con_id2] >= 2) >= round(sum(con_id2) / 2)
 
-    de_out <- DESeq2::DESeq(dds[kp_gene, ], parallel = FALSE)
+    de_out <- DESeq2::DESeq(dds[kp_gene, ], parallel = TRUE)
   } else {
-    de_out <- DESeq2::DESeq(dds, parallel = FALSE)
+    de_out <- DESeq2::DESeq(dds, parallel = TRUE)
   }
 
   # Return output
