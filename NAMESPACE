@@ -2,4 +2,5 @@
 
 export(scagg)
 export(scdeseq)
+export(schow)
 export(scout)
