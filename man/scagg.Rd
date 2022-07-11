@@ -24,13 +24,17 @@ these links.
 }
 \examples{
 # aggregate to sample level
-example_agg <- scagg(sc_counts = raw_counts,
-                     sc_table = raw_table,
-                     sc_group = "sample_name")
+example_agg <- scagg(
+  sc_counts = raw_counts,
+  sc_table = raw_table,
+  sc_group = "sample_name"
+)
 
 # aggregate to state level
-example_agg <- scagg(sc_counts = raw_counts,
-                     sc_table = raw_table,
-                     sc_group = "state")
+example_agg <- scagg(
+  sc_counts = raw_counts,
+  sc_table = raw_table,
+  sc_group = "state"
+)
 
 }

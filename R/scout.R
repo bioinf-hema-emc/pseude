@@ -8,8 +8,10 @@
 #' @param do_write Output is written to file
 #' @examples
 #' # Rasic run
-#' example_out <- scout(dds = agg_dds, comparison = "state,young,old",
-#'                      do_write = FALSE)
+#' example_out <- scout(
+#'   dds = agg_dds, comparison = "state,young,old",
+#'   do_write = FALSE
+#' )
 #' @return Optionally returns the data frame otherwise sent to xlsx file
 #' @export
 scout <- function(dds, comparison = "state,young,old", do_write = TRUE) {
@@ -18,12 +20,16 @@ scout <- function(dds, comparison = "state,young,old", do_write = TRUE) {
   spl_com <- strsplit(comparison, split = ",")[[1]]
   file_name <- paste0(spl_com[2], "V", spl_com[3])
   xlsx_name <- paste0(file_name, ".DESeq2.xlsx")
-  xlsx_head <- openxlsx::createStyle(textDecoration = "BOLD",
-                                     fgFill = "#4FBD61")
+  xlsx_head <- openxlsx::createStyle(
+    textDecoration = "BOLD",
+    fgFill = "#4FBD61"
+  )
 
   # Generate result table with ASHR-shrunk log2FC
-  res <- data.frame(DESeq2::lfcShrink(dds, contrast = spl_com, type = "ashr",
-                                quiet = TRUE))
+  res <- data.frame(DESeq2::lfcShrink(dds,
+    contrast = spl_com, type = "ashr",
+    quiet = TRUE
+  ))
 
   # Compute normalized counts
   norm_counts <- data.frame(DESeq2::counts(dds, normalized = TRUE))
@@ -32,8 +38,10 @@ scout <- function(dds, comparison = "state,young,old", do_write = TRUE) {
   out_res <- cbind(res, norm_counts)
 
   # Clarify column content
-  colnames(out_res)[1:5] <- c("basemean", "l2fc_ASHR", "standerror_ASHR",
-                              "pvalue", "padj")
+  colnames(out_res)[1:5] <- c(
+    "basemean", "l2fc_ASHR", "standerror_ASHR",
+    "pvalue", "padj"
+  )
 
   # Reorder output table on adjusted p-value
   out_res <- out_res[order(out_res$padj), c(4:5, 2:3, 1, 6:ncol(out_res))]
@@ -93,5 +101,4 @@ scout <- function(dds, comparison = "state,young,old", do_write = TRUE) {
   }
 
   return(out_res)
-
 }

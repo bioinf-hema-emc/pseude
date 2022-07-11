@@ -16,8 +16,10 @@
 #' example_dds <- scdeseq(agg_counts = agg_counts, agg_table = agg_table)
 #'
 #' # Do not prefilter
-#' example_dds <- scdeseq(agg_counts = agg_counts, agg_table = agg_table,
-#'                        do_prefilter = FALSE)
+#' example_dds <- scdeseq(
+#'   agg_counts = agg_counts, agg_table = agg_table,
+#'   do_prefilter = FALSE
+#' )
 #'
 #' @export
 scdeseq <- function(agg_counts,
@@ -27,7 +29,7 @@ scdeseq <- function(agg_counts,
                     threads = 10,
                     do_prefilter = TRUE) {
 
-   # Define variables
+  # Define variables
   spl_com <- strsplit(comparison, split = ",")[[1]]
   con_id1 <- c(agg_table[, spl_com[1]] == spl_com[2])
   con_id2 <- c(agg_table[, spl_com[1]] == spl_com[3])
@@ -35,8 +37,10 @@ scdeseq <- function(agg_counts,
   threads <- BiocParallel::register(BiocParallel::MulticoreParam(threads))
 
   # Generate DESeqDataSet for DE analysis
-  dds <- DESeq2::DESeqDataSetFromMatrix(agg_counts, colData = agg_table,
-                                        design = design)
+  dds <- DESeq2::DESeqDataSetFromMatrix(agg_counts,
+    colData = agg_table,
+    design = design
+  )
 
   # Remove the outliers
   if (do_prefilter) {
@@ -52,5 +56,4 @@ scdeseq <- function(agg_counts,
 
   # Return output
   return(de_out)
-
 }

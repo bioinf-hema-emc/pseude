@@ -40,7 +40,9 @@ data. Users can filter out genes only present in a few samples.
 example_dds <- scdeseq(agg_counts = agg_counts, agg_table = agg_table)
 
 # Do not prefilter
-example_dds <- scdeseq(agg_counts = agg_counts, agg_table = agg_table,
-                       do_prefilter = FALSE)
+example_dds <- scdeseq(
+  agg_counts = agg_counts, agg_table = agg_table,
+  do_prefilter = FALSE
+)
 
 }

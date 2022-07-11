@@ -10,14 +10,18 @@
 #' @return Returns counts aggregated to specified level
 #' @examples
 #' # aggregate to sample level
-#' example_agg <- scagg(sc_counts = raw_counts,
-#'                      sc_table = raw_table,
-#'                      sc_group = "sample_name")
+#' example_agg <- scagg(
+#'   sc_counts = raw_counts,
+#'   sc_table = raw_table,
+#'   sc_group = "sample_name"
+#' )
 #'
 #' # aggregate to state level
-#' example_agg <- scagg(sc_counts = raw_counts,
-#'                      sc_table = raw_table,
-#'                      sc_group = "state")
+#' example_agg <- scagg(
+#'   sc_counts = raw_counts,
+#'   sc_table = raw_table,
+#'   sc_group = "state"
+#' )
 #'
 #' @export
 scagg <- function(sc_counts,

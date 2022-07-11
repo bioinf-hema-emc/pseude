@@ -23,6 +23,8 @@ an xlsx file with the differentially expressed genes.
 }
 \examples{
 # Rasic run
-example_out <- scout(dds = agg_dds, comparison = "state,young,old",
-                     do_write = FALSE)
+example_out <- scout(
+  dds = agg_dds, comparison = "state,young,old",
+  do_write = FALSE
+)
 }
