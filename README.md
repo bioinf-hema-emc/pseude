@@ -185,7 +185,7 @@ design and comparison variables are case-sensitive.
 The most basic function call looks like this:
 
 ``` r
-aggregated_dds <- scagg(agg_counts = aggregated_counts,
+aggregated_dds <- scdeseq(agg_counts = aggregated_counts,
                         agg_table = sample_table,
                         design = "~state",
                         comparison = "state,young,old")
@@ -195,7 +195,7 @@ If you do not want to prefilter the genes and speed up the process a
 little, you can alter the function call like so:
 
 ``` r
-aggregated_dds <- scagg(agg_counts = aggregated_counts,
+aggregated_dds <- scdeseq(agg_counts = aggregated_counts,
                         agg_table = sample_table,
                         design = "~state",
                         comparison = "state,young,old",
