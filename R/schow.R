@@ -14,10 +14,7 @@
 #' @param do_return Output is returned as list of objects
 #' @examples
 #' # Rasic run, generate quality_metrics.pdf
-#' schow(
-#'   dds = agg_dds, comparison = "state,young,old",
-#'   out_path = "example/output/path"
-#' )
+#' schow(dds = agg_dds, comparison = "state,young,old")
 #'
 #' # return values as list, do not use rlog transform to speed up process
 #' example_show <- schow(
@@ -26,6 +23,13 @@
 #' )
 #' @return Optionally returns output from calling DESeq2's plotPCA and plotMA
 #' with returnData = TRUE
+#' @importFrom grDevices densCols
+#' @importFrom grDevices dev.off
+#' @importFrom grDevices pdf
+#' @importFrom graphics abline
+#' @importFrom graphics grid
+#' @importFrom graphics legend
+#' @importFrom graphics text
 #' @export
 schow <- function(dds,
                   comparison = "state,young,old",

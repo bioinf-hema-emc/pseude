@@ -42,10 +42,7 @@ file.
 }
 \examples{
 # Rasic run, generate quality_metrics.pdf
-schow(
-  dds = agg_dds, comparison = "state,young,old",
-  out_path = "example/output/path"
-)
+schow(dds = agg_dds, comparison = "state,young,old")
 
 # return values as list, do not use rlog transform to speed up process
 example_show <- schow(

@@ -22,20 +22,13 @@
 #'   sc_table = raw_table,
 #'   sc_group = "state"
 #' )
-#'
+#' @importFrom Matrix t
+#' @importFrom Matrix.utils aggregate.Matrix
 #' @export
 scagg <- function(sc_counts,
                   sc_table,
                   sc_group = "sample_name") {
 
-  # alias external functions
-  agg.Mat <- function(x, groupings = NULL, form = NULL, fun = "sum", ...) {
-    Matrix.utils::aggregate.Matrix(x, groupings, form, fun, ...)
-  }
-  t.Mat <- function(x) {
-    Matrix::t(x)
-  }
-
   # aggregate the gene counts by summation; making a sample-level count-matrix
-  return(t.Mat(agg.Mat(t.Mat(sc_counts), groupings = sc_table[, sc_group])))
+  return(t(aggregate.Matrix(t(sc_counts), groupings = sc_table[, sc_group])))
 }

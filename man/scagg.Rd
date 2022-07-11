@@ -36,5 +36,4 @@ example_agg <- scagg(
   sc_table = raw_table,
   sc_group = "state"
 )
-
 }
