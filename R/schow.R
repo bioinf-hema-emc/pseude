@@ -13,9 +13,10 @@
 #' regularized log
 #' @param do_return Output is returned as list of objects
 #' @examples
+#' \dontrun{
 #' # Rasic run, generate quality_metrics.pdf
 #' schow(dds = agg_dds, comparison = "state,young,old")
-#'
+#' }
 #' # return values as list, do not use rlog transform to speed up process
 #' example_show <- schow(
 #'   dds = agg_dds, comparison = "state,young,old",
@@ -23,13 +24,6 @@
 #' )
 #' @return Optionally returns output from calling DESeq2's plotPCA and plotMA
 #' with returnData = TRUE
-#' @importFrom grDevices densCols
-#' @importFrom grDevices dev.off
-#' @importFrom grDevices pdf
-#' @importFrom graphics abline
-#' @importFrom graphics grid
-#' @importFrom graphics legend
-#' @importFrom graphics text
 #' @export
 schow <- function(dds,
                   comparison = "state,young,old",
@@ -38,6 +32,7 @@ schow <- function(dds,
                   do_labels = TRUE,
                   do_rlog = TRUE,
                   do_return = FALSE) {
+
   # Test for any output ---------------------------
   if (!do_write & !do_return) {
     message("Neither writing nor assignment has be set.")
@@ -54,7 +49,7 @@ schow <- function(dds,
     rpval <- res$pvalue
     rpadj <- res$padj
     rl2fc <- res$log2FoldChange
-    rcols <- densCols(rl2fc, -log10(rpval))
+    rcols <- grDevices::densCols(rl2fc, -log10(rpval))
     rsc_g <- abs(rl2fc) > 2.5 & rpadj < 0.05
     rnm_g <- rownames(res)[rsc_g]
     if (is.null(out_path)) {
@@ -92,7 +87,7 @@ schow <- function(dds,
 
     # (Opt) plot graphs ---------------------------
     if (do_write) {
-      pdf(paste0(out_path, "/quality_metrics.pdf"), width = 10, height = 7.2)
+      grDevices::pdf(paste0(out_path, "/quality_metrics.pdf"), width = 10, height = 7.2)
 
       for (i in names(pca_list)) {
         pca_table <- pca_list[[i]]
@@ -110,7 +105,7 @@ schow <- function(dds,
           xlab = paste0("PC1: ", percentVar[1], "% variance"),
           ylab = paste0("PC2: ", percentVar[2], "% variance")
         )
-        legend(
+        graphics::legend(
           "topright",
           inset = c(0.02, 0.02),
           legend = levels(pca_table$group),
@@ -119,7 +114,7 @@ schow <- function(dds,
           cex = 0.8
         )
         if (do_labels) {
-          text(pca_table$PC1, pca_table$PC2, labels = pca_table$name)
+          graphics::text(pca_table$PC1, pca_table$PC2, labels = pca_table$name)
         }
       }
 
@@ -129,19 +124,19 @@ schow <- function(dds,
         rl2fc,
         -log10(rpadj),
         col = rcols,
-        panel.first = grid(),
+        panel.first = graphics::grid(),
         main = "Volcano plot",
         xlab = "Effect size: log2(fold-change)",
         ylab = "-log10(adjusted p-value)",
         pch = 20,
         cex = 0.6
       )
-      abline(
+      graphics::abline(
         v = -1:1, h = -log10(0.05),
         col = c(rep("brown", 2), "black", "brown")
       )
       if (sum(rsc_g, na.rm = TRUE)) {
-        text(
+        graphics::text(
           x         = rl2fc[rsc_g],
           y         = -log10(rpadj)[rsc_g],
           lab       = rnm_g,
@@ -149,7 +144,7 @@ schow <- function(dds,
         )
       }
 
-      dev.off()
+      grDevices::dev.off()
     }
 
     if (do_return) {

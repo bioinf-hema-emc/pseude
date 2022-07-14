@@ -41,9 +41,10 @@ visualise. Optionally, all visualisation can also be set to a single PDF
 file.
 }
 \examples{
+\dontrun{
 # Rasic run, generate quality_metrics.pdf
 schow(dds = agg_dds, comparison = "state,young,old")
-
+}
 # return values as list, do not use rlog transform to speed up process
 example_show <- schow(
   dds = agg_dds, comparison = "state,young,old",

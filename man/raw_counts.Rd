@@ -5,7 +5,7 @@
 \alias{raw_counts}
 \title{Cell-level gene counts of young and old mice}
 \format{
-A sparse Matrix with 21969 rows and 14813 variables:
+A sparse Matrix with 25 rows (genes) and 2500 columns (cells):
 \describe{
 \item{cell_id}{gene counts}
 }

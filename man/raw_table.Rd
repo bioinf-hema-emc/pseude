@@ -5,7 +5,7 @@
 \alias{raw_table}
 \title{Cell-level annotation of young and old mice}
 \format{
-A data frame with 14813 rows and 2 variables:
+A data frame with 2500 rows and 2 variables:
 \describe{
 \item{sample_name}{sample of origin}
 \item{state}{condition of cell}

@@ -17,11 +17,9 @@ Imports:
     ashr,
     BiocParallel,
     DESeq2,
-    graphics,
-    grDevices,
     KernSmooth,
     Matrix,
-    Matrix.utils,
+    methods,
     openxlsx
 Suggests: 
     ggplot2,

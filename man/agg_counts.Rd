@@ -5,7 +5,7 @@
 \alias{agg_counts}
 \title{Sample-level gene counts of young and old mice}
 \format{
-A sparse Matrix with 21969 rows and 15 variables:
+A sparse Matrix with 25 rows and 15 variables:
 \describe{
 \item{o1-o7}{sample IDs for old mice}
 \item{y1-y8}{sample IDs for young mice}

@@ -19,8 +19,6 @@ over they indicate that a “pseudobulk” approach to DE analysis is proven
 to be the better option. This package was made following the
 recommendations given in that paper.
 
-------------------------------------------------------------------------
-
 ## Installation
 
 You can install the development version of pseuDE from
@@ -49,19 +47,21 @@ BiocManager::install("BiocParallel")
 BiocManager::install("DESeq2")
 ```
 
-------------------------------------------------------------------------
-
 ## Examples
 
 The three main functions from pseuDE are `scagg`, `scdeseq` and `scout`.
 These functions aggregate the gene-counts, perform DE analysis and give
 the output file, respectively. <br>
 
+------------------------------------------------------------------------
+
 #### Function 1: scagg
+
+<br>
 
 ##### Input
 
-1.  `sc_counts`: A cell-level gene-count matrix of form *m* rows x *n*
+1.  `scounts`: A cell-level gene-count matrix of form *m* rows x *n*
     columns, with *m* being the genes and *n* the cells. If you’re
     working with Seurat (Hao *et al.*, 2021), such an object can be
     found by calling the following:
@@ -81,7 +81,7 @@ Which would look like this sparse matrix:
 | AP006222.2    |      .       |      .       |      9       |  …  |
 | …             |      …       |      …       |      …       |  …  |
 
-2.  `sc_table`: A look-up table that contains the groups you wish to
+2.  `scable`: A look-up table that contains the groups you wish to
     aggregate your samples to. Take this random sampling as an example:
     <br>
 
@@ -94,8 +94,10 @@ Which would look like this sparse matrix:
 | GCTTGCCGGGTG |   y6   | young |
 | …            |   …    |   …   |
 
-3.  `sc_group`: A character string that indicate which column(s) in
-    `sc_table` contains the groups you wish to use for aggregation.
+3.  `scroup`: A character string that indicate which column(s) in
+    `scable` contains the groups you wish to use for aggregation.
+
+<br>
 
 ##### Running the code
 
@@ -103,8 +105,8 @@ The most rudimentary aggregation is from cell to sample. If we take the
 examples from the previous section, the call would look like this: <br>
 
 ``` r
-aggregated_counts <- scagg(sc_counts = cell_counts, sc_table = cell_table,
-                           sc_group = "sample")
+aggregated_counts <- scagg(scounts = cell_counts, scable = cell_table,
+                           scroup = "sample")
 ```
 
 Say you have clustered the cells as well and you want to aggregate to
@@ -112,24 +114,30 @@ clusters as you consider them the different cell types. Then, something
 like the following would do:
 
 ``` r
-aggregated_counts <- scagg(sc_counts = cell_counts, sc_table = cell_table,
-                           sc_group = "clusters")
+aggregated_counts <- scagg(scounts = cell_counts, scable = cell_table,
+                           scroup = "clusters")
 ```
 
 You can also use multiple groupings. For example, if you want
 sample-specific clusters:
 
 ``` r
-aggregated_counts <- scagg(sc_counts = cell_counts, sc_table = cell_table,
-                           sc_group = c("sample", "clusters"))
+aggregated_counts <- scagg(scounts = cell_counts, scable = cell_table,
+                           scroup = c("sample", "clusters"))
 ```
+
+<br>
 
 ##### Output
 
 the `aggregated_counts` object will contain a *m* x *n’* sparse matrix,
 with *n’* being the cells aggregated to whichever level you set it to.
 
+------------------------------------------------------------------------
+
 #### Function 2: scdeseq
+
+<br>
 
 ##### Input
 
@@ -180,15 +188,17 @@ Defaults to 10 and sets the number of BiocParallel (Morgan *et al.*,
 **Always** keep in mind that the character strings you assign to the
 design and comparison variables are case-sensitive.
 
+<br>
+
 ##### Running the code
 
 The most basic function call looks like this:
 
 ``` r
 aggregated_dds <- scdeseq(agg_counts = aggregated_counts,
-                        agg_table = sample_table,
-                        design = "~state",
-                        comparison = "state,young,old")
+                          agg_table = sample_table,
+                          design = "~state",
+                          comparison = "state,young,old")
 ```
 
 If you do not want to prefilter the genes and speed up the process a
@@ -196,19 +206,25 @@ little, you can alter the function call like so:
 
 ``` r
 aggregated_dds <- scdeseq(agg_counts = aggregated_counts,
-                        agg_table = sample_table,
-                        design = "~state",
-                        comparison = "state,young,old",
-                        do_prefilter = FALSE,
-                        threads = 12)
+                          agg_table = sample_table,
+                          design = "~state",
+                          comparison = "state,young,old",
+                          do_prefilter = FALSE,
+                          threads = 12)
 ```
+
+<br>
 
 ##### Output
 
 The `aggregated_dds` object consists out of a DESeqDataSet object with
 the results of the DE analysis attached as metadata columns.
 
+------------------------------------------------------------------------
+
 #### Function 3: scout
+
+<br>
 
 ##### Input
 
@@ -219,6 +235,8 @@ the results of the DE analysis attached as metadata columns.
 3.  `do_write` (optional): This argument defaults to TRUE, which means
     that it will generate an .xlsx file with the DESeq2 DE genes. If you
     wish to only get the output within your rsession, set this to FALSE.
+
+<br>
 
 ##### Running the code
 
@@ -236,6 +254,8 @@ aggregated_output <- scout(dds = aggregated_dds, comparison = "state,young,old",
                            do_write = FALSE)
 ```
 
+<br>
+
 ##### Output
 
 `aggregated_output` will contain a table with the genes ordered by
@@ -246,6 +266,8 @@ the table found in the `aggregated_output` object. The first sheet will
 only contain the statistics of those genes with a adjusted p-value \<
 0.05 and the second sheet will have the counts for those genes attached.
 
+------------------------------------------------------------------------
+
 #### Additional function: schow
 
 The function `schow` generates a document with basic plots for visual
@@ -253,6 +275,8 @@ inspection. Right now it will generate PCA plots for the regularized log
 and variance stabilized transform, a MAplot and a volcano plot of the DE
 results. It’s also possible to retrieve these results as a global
 variable without writing to a file.
+
+<br>
 
 ##### Input
 
@@ -275,6 +299,8 @@ variable without writing to a file.
 7.  `do_return` (optional): This argument defaults to FALSE, which means
     that it will not assign any results to global variables.
 
+<br>
+
 ##### Running the code
 
 Running the following call will generate the quality_metrics file; it is
@@ -292,6 +318,8 @@ values and wish to speed the process up:
 aggregated_show <- schow(dds = aggregated_dds, comparison = "state,young,old",
                            do_write = FALSE, do_rlog = FALSE, do_return = TRUE)
 ```
+
+<br>
 
 ##### Output
 
