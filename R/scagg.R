@@ -28,7 +28,7 @@ scagg <- function(scounts,
                   scroup = "sample_name") {
 
   # Deflate sc_counts ---------------------------
-  if (!methods::is(scounts, "Matrix")) {
+  if (class(x) != "dgCMatrix") {
     scounts <- Matrix::Matrix(as.matrix(scounts), sparse = TRUE)
   }
 

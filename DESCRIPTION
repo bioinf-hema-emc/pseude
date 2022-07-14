@@ -19,7 +19,6 @@ Imports:
     DESeq2,
     KernSmooth,
     Matrix,
-    methods,
     openxlsx
 Suggests: 
     ggplot2,
