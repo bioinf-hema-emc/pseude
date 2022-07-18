@@ -54,21 +54,17 @@ scupple <- function(sc_counts,
                    writeorret = TRUE) {
 
   # Call scagg ---------------------------
-  agg_counts <- scagg(
+  agg_list <- scagg(
     sc_counts = sc_counts,
     sc_table = sc_table,
-    sc_group = sc_group
+    sc_group = sc_group,
+    comparison = comparison
   )
-
-  # Create aggable ---------------------------
-  uni_table <- unique(sc_table[, c(sc_group, design)])
-  uni_fact <- as.factor(do.call(paste, c(uni_table[, sc_group, drop = FALSE], sep = "_")))
-  agg_table <- data.frame(uni_table[, design, drop = FALSE], row.names = uni_fact)
 
   # Call scdeseq ---------------------------
   agg_dds <- sciff(
-    agg_counts = agg_counts,
-    agg_table = agg_table,
+    agg_counts = agg_list$agg_counts,
+    agg_table = agg_list$agg_table,
     design = design,
     comparison = comparison,
     threads = threads,
@@ -90,7 +86,7 @@ scupple <- function(sc_counts,
       out_path = out_path,
       do_write = TRUE,
       do_labels = TRUE,
-      do_rlog = TRUE,
+      do_rlog = FALSE,
       do_return = FALSE
     )
   } else {
@@ -107,7 +103,7 @@ scupple <- function(sc_counts,
       out_path = out_path,
       do_write = FALSE,
       do_labels = TRUE,
-      do_rlog = TRUE,
+      do_rlog = FALSE,
       do_return = TRUE
     )
     return(list(agg_out, agg_show))

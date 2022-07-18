@@ -4,7 +4,12 @@
 \alias{scagg}
 \title{Aggregate single-cell RNA-seq data to desired level}
 \usage{
-scagg(sc_counts, sc_table, sc_group = "sample_name")
+scagg(
+  sc_counts,
+  sc_table,
+  sc_group = "sample_name",
+  comparison = "state,young,old"
+)
 }
 \arguments{
 \item{sc_counts}{Table that contains the cell-level gene-counts}
@@ -12,9 +17,11 @@ scagg(sc_counts, sc_table, sc_group = "sample_name")
 \item{sc_table}{Look-up table that links cells to aggregation groups}
 
 \item{sc_group}{String with column in agg_table that contains the grouping}
+
+\item{comparison}{A string in form "condition,group A,group B"}
 }
 \value{
-Returns counts aggregated to specified level
+Returns a list with aggregated counts and aggregated annotation table to specified level
 }
 \description{
 This function allows the user to aggregate the counts from single-cell
@@ -28,13 +35,15 @@ these links.
 example_agg <- scagg(
   sc_counts = raw_counts,
   sc_table = raw_table,
-  sc_group = "sample_name"
+  sc_group = "sample_name",
+  comparison = "state,young,old"
 )
 
 # aggregate to state level
 example_agg <- scagg(
   sc_counts = raw_counts,
   sc_table = raw_table,
-  sc_group = "state"
+  sc_group = "state",
+  comparison = "state,young,old"
 )
 }

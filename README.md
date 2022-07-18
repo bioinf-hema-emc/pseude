@@ -180,7 +180,7 @@ test? Simply run:
 Be mindful that this follows young VS old, meaning that everything with
 a **positive Fold Change (FC)** is up-regulated in **young** and
 everything with a **negative FC** is up-regulated in **old**. <br> 5.
-`do_prefilter` (optional): Defaults to TRUE, this removes genes that
+`do_prefilter` (optional): Defaults to `TRUE`, this removes genes that
 only have a counts in a few samples. <br> 6. `threads` (optional):
 Defaults to 10 and sets the number of BiocParallel (Morgan *et al.*,
 2022) workers for the DE analysis.
@@ -234,10 +234,10 @@ the results of the DE analysis attached as metadata columns.
     details.
 3.  `out_path` (optional): Defaults to work directory. Indicates to
     which directory the output file needs to be written.
-4.  `do_write` (optional): This argument defaults to TRUE, which means
+4.  `do_write` (optional): This argument defaults to `TRUE`, which means
     that it will generate an .xlsx file with the DESeq2 DE genes.
-5.  `do_return` (optional): This argument default to FALSE. If you wish
-    to assign the output within your rsession, set this to TRUE.
+5.  `do_return` (optional): This argument default to `FALSE`. If you
+    wish to assign the output within your rsession, set this to `TRUE`.
 
 <br>
 
@@ -288,18 +288,18 @@ without writing to a file.
     details.
 3.  `out_path` (optional): Defaults to work directory. Indicates to
     which directory the output file needs to be written.
-4.  `do_write` (optional): This argument defaults to TRUE, which means
+4.  `do_write` (optional): This argument defaults to `TRUE`, which means
     that it will generate a file called quality_metrics.pdf with the
     various plots.
-5.  `do_labels` (optional): This argument defaults to TRUE, which means
-    that it will give the points in the PCA plots the corresponding
-    sample lables.
-6.  `do_rlog` (optional): This argument defaults to TRUE, which means
+5.  `do_labels` (optional): This argument defaults to `TRUE`, which
+    means that it will give the points in the PCA plots the
+    corresponding sample lables.
+6.  `do_rlog` (optional): This argument defaults to `TRUE`, which means
     that it will do both regularized log and variance stabilized
     transfrom on the DE results. You can turn of the rlog, as it might
     take quite long with larger data sets.
-7.  `do_return` (optional): This argument defaults to FALSE, which means
-    that it will not assign any results to global variables.
+7.  `do_return` (optional): This argument defaults to `FALSE`, which
+    means that it will not assign any results to global variables.
 
 <br>
 
@@ -339,9 +339,9 @@ for the user. However, the current form of `scupple` has less parameters
 to fine-tune. The following parameters are changed: 1. The parameter
 writeorret is a binary choice that either writes the various files
 **or** returns the output to an assigned variable. 2. The parameter
-`do_rlog` is hardcoded to TRUE. Regularised log is the recommended
-option anyway, but that means it will take a bit longer to run through
-the steps. 3. You cannot turn off `do_labels` for visualisation.
+`do_rlog` is hardcoded to `FALSE`. Regularised log is recommended, but
+it takes quite a while with more than 20 samples. 3. You cannot turn off
+`do_labels` for visualisation.
 
 <br>
 
@@ -363,9 +363,9 @@ the steps. 3. You cannot turn off `do_labels` for visualisation.
     details.
 8.  `out_path`: Defaults to work directory. Indicates to which directory
     the output file needs to be written.
-9.  `writeorret`: Defaults to TRUE, writing the files to
-    quality_metrics.pdf and \[file_name\].DESeq2.xlsx. If set to FALSE,
-    will return the data instead.
+9.  `writeorret`: Defaults to `TRUE`, writing the files to
+    quality_metrics.pdf and \[file_name\].DESeq2.xlsx. If set to
+    `FALSE`, will return the data instead.
 
 <br>
 
