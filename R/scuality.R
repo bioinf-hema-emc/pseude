@@ -13,19 +13,33 @@
 #' regularized log
 #' @param do_return Output is returned as list of objects
 #' @examples
+#' # Examples given with all optional parameters for education purposes
 #' \dontrun{
 #' # Rasic run, generate quality_metrics.pdf
-#' schow(dds = agg_dds, comparison = "state,young,old")
+#' scuality(
+#'   dds = agg_dds,
+#'   comparison = "state,young,old",
+#'   out_path = "/example/output/path",
+#'   do_write = TRUE,
+#'   do_labels = TRUE,
+#'   do_rlog = TRUE,
+#'   do_return = FALSE
+#' )
 #' }
 #' # return values as list, do not use rlog transform to speed up process
-#' example_show <- schow(
-#'   dds = agg_dds, comparison = "state,young,old",
-#'   do_write = FALSE, do_rlog = FALSE, do_return = TRUE
+#' example_show <- scuality(
+#'   dds = agg_dds,
+#'   comparison = "state,young,old",
+#'   out_path = NULL,
+#'   do_write = FALSE,
+#'   do_labels = TRUE,
+#'   do_rlog = FALSE,
+#'   do_return = TRUE
 #' )
 #' @return Optionally returns output from calling DESeq2's plotPCA and plotMA
 #' with returnData = TRUE
 #' @export
-schow <- function(dds,
+scuality <- function(dds,
                   comparison = "state,young,old",
                   out_path = NULL,
                   do_write = TRUE,
@@ -46,12 +60,9 @@ schow <- function(dds,
       contrast = spl_com, type = "ashr",
       quiet = TRUE
     )
-    rpval <- res$pvalue
-    rpadj <- res$padj
-    rl2fc <- res$log2FoldChange
-    rcols <- grDevices::densCols(rl2fc, -log10(rpval))
-    rsc_g <- abs(rl2fc) > 2.5 & rpadj < 0.05
-    rnm_g <- rownames(res)[rsc_g]
+    res_cols <- grDevices::densCols(res$log2FoldChange, -log10(res$pvalue))
+    sig_bool <- abs(res$log2FoldChange) > 2.5 & res$padj < 0.05
+    sig_gene <- rownames(res)[sig_bool]
     if (is.null(out_path)) {
       out_path <- "."
     }
@@ -121,9 +132,9 @@ schow <- function(dds,
       DESeq2::plotMA(res, ylim = c(-4, 4), main = "Shrunken log2 Fold Change (ASHR)")
 
       plot(
-        rl2fc,
-        -log10(rpadj),
-        col = rcols,
+        res$log2FoldChange,
+        -log10(res$padj),
+        col = res_cols,
         panel.first = graphics::grid(),
         main = "Volcano plot",
         xlab = "Effect size: log2(fold-change)",
@@ -135,11 +146,11 @@ schow <- function(dds,
         v = -1:1, h = -log10(0.05),
         col = c(rep("brown", 2), "black", "brown")
       )
-      if (sum(rsc_g, na.rm = TRUE)) {
+      if (sum(sig_bool, na.rm = TRUE)) {
         graphics::text(
-          x         = rl2fc[rsc_g],
-          y         = -log10(rpadj)[rsc_g],
-          lab       = rnm_g,
+          x         = res$log2FoldChange[sig_bool],
+          y         = -log10(res$padj)[sig_bool],
+          lab       = sig_gene,
           cex       = 0.6
         )
       }

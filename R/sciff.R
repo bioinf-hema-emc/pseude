@@ -12,37 +12,54 @@
 #' @return Returns a DESeqDataSet object with results stored as metadata
 #' columns.
 #' @examples
+#' # Examples given with all optional parameters for education purposes
 #' # Basic run
-#' example_dds <- scdeseq(agg_counts = agg_counts, agg_table = agg_table)
+#' example_dds <- sciff(
+#'   agg_counts = agg_counts,
+#'   agg_table = agg_table,
+#'   design = "state",
+#'   comparison = "state,young,old",
+#'   threads = 10,
+#'   do_prefilter = TRUE
+#' )
 #'
-#' # Do not prefilter
-#' example_dds <- scdeseq(
-#'   agg_counts = agg_counts, agg_table = agg_table,
+#' # Do not prefilter; speed up process
+#' example_dds <- sciff(
+#'   agg_counts = agg_counts,
+#'   agg_table = agg_table,
+#'   design = "state",
+#'   comparison = "state,young,old",
+#'   threads = 16,
 #'   do_prefilter = FALSE
 #' )
 #'
 #' @export
-scdeseq <- function(agg_counts,
+sciff <- function(agg_counts,
                     agg_table,
-                    design = "~state",
+                    design = "state",
                     comparison = "state,young,old",
                     threads = 10,
                     do_prefilter = TRUE) {
 
-  # Define variables
+  # Define variables ---------------------------
   spl_com <- strsplit(comparison, split = ",")[[1]]
   con_id1 <- c(agg_table[, spl_com[1]] == spl_com[2])
   con_id2 <- c(agg_table[, spl_com[1]] == spl_com[3])
-  design <- stats::as.formula(design)
   threads <- BiocParallel::register(BiocParallel::MulticoreParam(threads))
+  agg_order <- match(colnames(agg_counts), rownames(agg_table))
 
-  # Generate DESeqDataSet for DE analysis
+  # Configure DESeq2 input ---------------------------
+  design <- stats::as.formula(paste0("~", design))
+  agg_table <- agg_table[agg_order, , drop = FALSE]
+
+
+  # Generate DESeqDataSet for DE analysis ---------------------------
   dds <- DESeq2::DESeqDataSetFromMatrix(agg_counts,
     colData = agg_table,
     design = design
   )
 
-  # Remove the outliers
+  # Remove possible outliers ---------------------------
   if (do_prefilter) {
     dds_frag <- DESeq2::fpm(dds)
 
@@ -54,6 +71,6 @@ scdeseq <- function(agg_counts,
     de_out <- DESeq2::DESeq(dds, parallel = TRUE)
   }
 
-  # Return output
+  # Return output ---------------------------
   return(de_out)
 }
