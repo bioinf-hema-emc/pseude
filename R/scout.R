@@ -97,7 +97,7 @@ scout <- function(dds,
       openxlsx::writeDataTable(
         wb,
         sheet = 1,
-        x = out_sign[, 1:6],
+        x = out_sign[, 1:5],
         rowNames = TRUE,
         headerStyle = xlsx_head
       )
